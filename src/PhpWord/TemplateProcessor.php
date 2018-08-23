@@ -100,7 +100,9 @@ class TemplateProcessor
             );
             $index++;
         }
-        $this->tempDocumentMainPart = $this->fixBrokenMacros($this->zipClass->getFromName($this->getMainPartName()));
+        //$this->tempDocumentMainPart = $this->fixBrokenMacros($this->zipClass->getFromName($this->getMainPartName()));
+        $text = str_replace('&#36;{','${',str_replace('$', '&#36;', $this->zipClass->getFromName($this->getMainPartName())));
+        $this->tempDocumentMainPart = $this->fixBrokenMacros($text);
     }
 
     /**
