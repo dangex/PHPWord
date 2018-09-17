@@ -12,7 +12,6 @@ composer.lock
 composer.phar
 vendor
 /report
-/build
 /samples/resources
 /samples/results
 /.settings
@@ -21,3 +20,4 @@ phpword.ini
 /.project
 /nbproject
 /.php_cs.cache
+/.phpintel/

@@ -100,9 +100,12 @@ class TemplateProcessor
             );
             $index++;
         }
-        //$this->tempDocumentMainPart = $this->fixBrokenMacros($this->zipClass->getFromName($this->getMainPartName()));
-        $text = str_replace('&#36;{','${',str_replace('$', '&#36;', $this->zipClass->getFromName($this->getMainPartName())));
-        $this->tempDocumentMainPart = $this->fixBrokenMacros($text);
+
+         
+        $this->tempDocumentMainPart = $this->fixBrokenMacros($this->zipClass->getFromName($this->getMainPartName()));
+        //este arreglo no funciono porque no reemplaza en algunas ocasiones los placeholder se deja como estaba y lo que se modifica els la funcion fixBrokenMacros
+        //$text = str_replace('&#36;{','${',str_replace('$', '&#36;', $this->zipClass->getFromName($this->getMainPartName())));
+        //$this->tempDocumentMainPart = $this->fixBrokenMacros($text);
     }
 
     /**
@@ -446,7 +449,9 @@ class TemplateProcessor
         $fixedDocumentPart = $documentPart;
 
         $fixedDocumentPart = preg_replace_callback(
-            '|\$[^{]*\{[^}]*\}|U',
+            //'|\$[^{]*\{[^}]*\}|U',
+            //se agrega esta liena para que se pueda colocar el signo $ en el documento sin que afecte las variables y el reemplazo
+            '/\$(?:\{|[^{$]*\>\{)[^}$]*\}/U',
             function ($match) {
                 return strip_tags($match[0]);
             },
