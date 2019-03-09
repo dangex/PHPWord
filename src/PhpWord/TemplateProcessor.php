@@ -323,7 +323,7 @@ class TemplateProcessor
      *
      * @return string|null
      */
-    public function cloneBlock($blockname, $clones = 1, $replace = true)
+ /*    public function cloneBlock($blockname, $clones = 1, $replace = true)
     {
         $xmlBlock = null;
         preg_match(
@@ -336,6 +336,39 @@ class TemplateProcessor
             $xmlBlock = $matches[3];
             $cloned = array();
             for ($i = 1; $i <= $clones; $i++) {
+                $cloned[] = $xmlBlock;
+            }
+
+            if ($replace) {
+                $this->tempDocumentMainPart = str_replace(
+                    $matches[2] . $matches[3] . $matches[4],
+                    implode('', $cloned),
+                    $this->tempDocumentMainPart
+                );
+            }
+        }
+
+        return $xmlBlock;
+    } */
+
+    public function cloneBlock($blockname, $clones = 1, $replace = true, $incrementVariables = true)
+    {
+        $xmlBlock = null;
+        preg_match(
+            #'/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+           '/(<\?xml.*)(<w:p\b[^>]*>.*?\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p\b[^>]*>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
+            $this->tempDocumentMainPart,
+            $matches
+        );
+
+        if (isset($matches[3])) {
+            $xmlBlock = $matches[3];
+            $cloned = array();
+            for ($i = 1; $i <= $clones; $i++) {
+                if($incrementVariables) {
+                    $xmlBlock = $matches[3];
+                    $xmlBlock = preg_replace('/\$\{(.*?)\}/', '\${\\1#' . $i . '}', $xmlBlock);
+                }
                 $cloned[] = $xmlBlock;
             }
 
